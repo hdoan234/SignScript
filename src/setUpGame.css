@@ -59,3 +59,12 @@ button:hover {
 .stats p {
     margin: 10px 0;
 }
+
+.stats p {
+    margin: 10px 0;
+}
+
+#timer {
+    font-size: 1.2em;
+    font-weight: bold;
+}

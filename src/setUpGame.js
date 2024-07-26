@@ -63,3 +63,31 @@ function updateWPM() {
     const wpm = Math.floor(words / timeDiff);
     wpmDisplay.textContent = `WPM: ${wpm}`;
 }
+// Function count time 
+function startTimer(duration) {
+    let timer = duration, minutes, seconds;
+    const timerDisplay = document.createElement('p');
+    timerDisplay.id = 'timer';
+    document.querySelector('.stats').appendChild(timerDisplay);
+
+    const countdownInterval = setInterval(() => {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        timerDisplay.textContent = `Time: ${minutes}:${seconds}`;
+
+        if (--timer < 0) {
+            clearInterval(countdownInterval);
+        }
+    }, 1000);
+}
+// Function end game
+function endGame() {
+    clearInterval(interval);
+    textInput.disabled = true;
+    startButton.disabled = false;
+    alert("Time out!! you loser");
+}
