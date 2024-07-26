@@ -1,14 +1,19 @@
-.practice-header{
+body {
+    background-color: #f0f8ff;
+}
+
+.practice-header {
     color: rgb(0, 0, 0);
     font-size: 2em;
     font-family: 'Times New Roman', Times, serif;
     margin-top: 4vh;
     display: flex;
     justify-content: center;
-    top:0;
+    top: 0;
     position: relative;
 }
-.container{
+
+.container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,7 +25,14 @@
     margin-top: 5vh;
     margin-bottom: 5vh;
 }
-.text-container{
+
+.monkey {
+    width: 20vw;
+    height: auto;
+    margin-right: 5vw;
+}
+
+.text-container {
     display: flex;
     flex-direction: column;
     width: 50%;
@@ -30,19 +42,22 @@
     top: 0;
     margin: 2vw;
 }
-.paragraph{
+
+.paragraph {
     color: rgb(0, 0, 0);
     font-size: 1.3em;
     font-family: 'Times New Roman', Times, serif;
     margin-top: 4vh;
     display: flex;
-    top:0;
-}   
-.output{
+    top: 0;
+}
+
+.output {
     font-weight: 700;
     color: rgb(0, 0, 0);
 }
-.output-text{
+
+.output-text {
     color: rgb(0, 0, 0);
     font-size: 1.3em;
     font-family: 'Times New Roman', Times, serif;
@@ -52,21 +67,23 @@
     width: 40vw;
     height: 25vh;
 }
-.text{
+
+.text {
     color: rgb(0, 0, 0);
     font-size: 1.8em;
     font-family: 'Times New Roman', Times, serif;
     margin-top: 4vh;
     display: flex;
     justify-content: center;
-    top:0;
+    top: 0;
     position: relative;
 }
-.hand{
+
+.hand {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left:2vw;
+    margin-left: 2vw;
     width: 30vw;
     height: 40vh;
     border: solid 1px white;

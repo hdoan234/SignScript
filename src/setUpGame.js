@@ -30,8 +30,9 @@ function startGame() {
     wordDisplay.textContent = randomSentence;
     startTime = new Date().getTime();
     interval = setInterval(updateWPM, 1000);
+    startTimer();
 }
-
+// Check input sentences
 function checkInput() {
     const inputText = textInput.value;
     const displayText = wordDisplay.textContent;
@@ -55,7 +56,7 @@ function checkInput() {
     }
 }
 
-// Function check time
+// Function check word / time
 function updateWPM() {
     const currentTime = new Date().getTime();
     const timeDiff = (currentTime - startTime) / 1000 / 60; // in minutes
