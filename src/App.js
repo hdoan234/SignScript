@@ -1,15 +1,48 @@
 // src/App.js
 import React from 'react';
 import './App.css';
-import Cube from './Cube.js';
+import { useEffect, useState } from 'react';
+import { detectHands, aslPredict } from './handpose';
+import { transpose } from '@tensorflow/tfjs';
 
 function App() {
+  const [output, setOutput] = useState('');
+
   function prevStep(){
     if(index === 0){
       setIndex(image.length-1)
       return
     }
     setIndex(index-1)
+  }
+
+  const drawHand = (keypointsList, ctx) => {
+    const connections = [
+      [0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6],
+      [6, 7], [7, 8], [0, 9], [9, 10], [10, 11], [11, 12],
+      [0, 13], [13, 14], [14, 15], [15, 16], [0, 17], [17, 18],
+      [18, 19], [19, 20]
+    ];
+    // Clear the canvas
+    keypointsList.forEach((keypoints) => {
+      keypoints["coords"] = keypoints["coords"].map(point => [ point[0], point[1], point[2]]);
+      ctx.strokeStyle = keypoints["isLeft"] ? 'lime' : 'cyan';
+      connections.forEach(([start, end]) => {
+        ctx.beginPath();
+        ctx.moveTo(keypoints["coords"][start][0], keypoints["coords"][start][1]);
+        ctx.lineTo(keypoints["coords"][end][0], keypoints["coords"][end][1]);
+        ctx.lineWidth = 5;
+        ctx.stroke();
+      });
+      
+      // Draw keypoints
+      ctx.fillStyle = keypoints["isLeft"] ? 'red' : 'blue';
+      keypoints["coords"].forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point[0], point[1], 5, 0, 10 * Math.PI);
+        ctx.fill();
+      });
+    })
   }
 
   function nextStep(){
@@ -29,6 +62,64 @@ function App() {
     "https://i.pinimg.com/564x/02/1a/65/021a65b9aedb22ad9482babb9925b5bd.jpg"
     
   ]
+
+  useEffect(() => {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+
+    video.width = 640;
+    video.height = 480;
+
+    video.style.display = 'none';
+
+    document.getElementById('root').appendChild(video);
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => {
+      video.srcObject = stream;
+
+      video.play();
+      console.log('Video stream loaded');
+    })
+    .catch(err => {
+      console.error(err);
+    });
+
+    let interId;
+    
+    const canvas = document.getElementById('handCanvas');
+    const ctx = canvas.getContext('2d');
+    new Promise((resolve) => video.onloadedmetadata = resolve)
+    .then(() => {
+      console.log('Video metadata loaded');
+  
+      interId = setInterval(async () => {
+        const hands = await detectHands(video);
+        if (hands.length <= 0) {
+          return;
+        }
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        setOutput(o => o + aslPredict(hands[0].keypoints3D.map(point => [point.x,point.y,point.z]), hands[0].handedness === "Left"));
+        drawHand(hands.map(hand =>  {
+          return {
+            "coords": hand.keypoints.map(point => [point.x,point.y]),
+            "isLeft": hand.handedness === "Left",
+          }
+        })
+        ,ctx);
+      }, 30);
+    });
+
+
+    return () => {
+      clearInterval(interId);
+    }
+    
+  }, [])
+
   return (
     <div className="App">
        <div className='header-bar'>
@@ -48,6 +139,8 @@ function App() {
           <button className="prev" onClick={prevStep}> prev</button>
           <button className="next" onClick={nextStep}>next</button>
         </div>
+        <canvas id="handCanvas" style={{ transfrom: "translateY(-150%)" }}></canvas>
+        <div style={{ fontSize: "20px" }}>{output}</div>
         <button className='transcript-button'>Start Transcript</button>
         
         {/* <Cube /> */}
