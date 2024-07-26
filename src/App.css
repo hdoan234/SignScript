@@ -19,8 +19,8 @@ body {
 
 .App {
   text-align: center;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -53,39 +53,55 @@ body {
   cursor: pointer;
 }
 
-.header-bar a {
-  color: white;
-  font-size: 1rem;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  text-decoration: none;
-  padding: 20px; 
-}
-
 .header {
   color: rgb(0, 0, 0);
   font-size: 4em;
   margin-bottom: 0px;
-  margin-top: auto;
+  margin-top: 2vj;
   font-family:Georgia, 'Times New Roman', Times, serif
 }
 
 .slogan {
   color: rgb(0, 0, 0);
   font-size: 1.2em;
-  margin-bottom: 6vh;
+  margin-bottom: 4vh;
 }
 .slideshow{
   width: 70vw;
   height: 50vh;
 }
+.buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.learn-button {
+  all: unset;
+  padding: 15px 25px;
+  font-size: 1em;
+  cursor: pointer;
+  background-color: #8babf1;
+  border-radius: 20px;
+  color: white;
+  border: none;
+  font-family: 'Courier New', Courier, monospace;
+  margin-top: 3vh;
+  position: relative; 
+  z-index: 10;
+}
+.learn-button:hover {
+  background-color: #0461cf;
+  transition: ease-in-out 0.3s;
+} 
+
 .transcript-button {
   all: unset;
   padding: 15px 25px;
   font-size: 1em;
   cursor: pointer;
   background-color: #054fb9;
-  border-radius: 15px;
+  border-radius: 20px;
   color: white;
   border: none;
   font-family: 'Courier New', Courier, monospace;
@@ -94,22 +110,10 @@ body {
   z-index: 10;
 }
 
-/* Optional: Adjust `.header-bar` if it might be overlapping */
-.header-bar {
-  z-index: 5; 
-}
-
 .transcript-button:hover {
-  background-color: #0461cf;
+  background-color: #0073e6;
   transition: ease-in-out 0.3s;
 }
-
-.cube-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
 
 /*slide show styling*/
 :root {
@@ -121,7 +125,7 @@ body {
 .container {
   display: flex;
   height: 100vh;
-  background-color: #0f0c29;
+  background-color: #b3c7f7;
 }
 
 .slideshow {
@@ -130,16 +134,17 @@ body {
   aspect-ratio: calc(16 / 9);
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 20px;
+  height:50vh;
 }
 
 button {
   padding: 16px;
-  font-size: 18px;
+  font-size: 20px;
   width: 64px;
   aspect-ratio: 1;
-  border-radius: 32px;
-  background-color: #0f0c29;
+  border-radius: 50%;
+  background-color: #0000001c;
   border: none;
   cursor: pointer;
   text-align: center;
@@ -147,13 +152,13 @@ button {
 }
 
 button:hover {
-  background-color: #24243e;
+  background-color: #0073e634;
 }
 
 .prev {
   position: absolute;
   top: 50%;
-  left: 16px;
+  left: 2vw;
   transform: translateY(-50%);
 }
 
@@ -170,7 +175,8 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit:contain;
   object-position: center;
   padding: 2vh;
+  border-radius: 20px;
 }
