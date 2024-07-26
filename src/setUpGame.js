@@ -5,9 +5,9 @@ const accuracyDisplay = document.getElementById('accuracy');
 const wpmDisplay = document.getElementById('wpm');
 
 const sentences = [
-    'Ngan sieu cap dep gai',
+    'Ngan sieu cap vip pro',
     'Hung khung loz',
-    'Hoa sieu cap dep gai nhung ve nhi'
+    'Hoa sieu cap dep gai'
 ];
 
 let startTime, interval;
@@ -81,6 +81,7 @@ function startTimer(duration) {
 
         if (--timer < 0) {
             clearInterval(countdownInterval);
+            endGame();
         }
     }, 1000);
 }
