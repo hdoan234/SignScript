@@ -1,0 +1,73 @@
+.practice-header{
+    color: rgb(0, 0, 0);
+    font-size: 2em;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 4vh;
+    display: flex;
+    justify-content: center;
+    top:0;
+    position: relative;
+}
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    background-color: rgba(240, 248, 255, 0.405);
+    width: 90vw;
+    height: 80vh;
+    border-radius: 20px;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+.text-container{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 70vh;
+    border: 1px solid white;
+    padding: 1vh 3vw;
+    top: 0;
+    margin: 2vw;
+}
+.paragraph{
+    color: rgb(0, 0, 0);
+    font-size: 1.3em;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 4vh;
+    display: flex;
+    top:0;
+}   
+.output{
+    font-weight: 700;
+    color: rgb(0, 0, 0);
+}
+.output-text{
+    color: rgb(0, 0, 0);
+    font-size: 1.3em;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 4vh;
+    display: flex;
+    justify-content: center;
+    width: 40vw;
+    height: 25vh;
+}
+.text{
+    color: rgb(0, 0, 0);
+    font-size: 1.8em;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 4vh;
+    display: flex;
+    justify-content: center;
+    top:0;
+    position: relative;
+}
+.hand{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:2vw;
+    width: 30vw;
+    height: 40vh;
+    border: solid 1px white;
+}

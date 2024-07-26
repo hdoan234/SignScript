@@ -151,6 +151,7 @@ function App() {
               <button className="prev" onClick={prevStep}>&lt; </button>
               <button className="next" onClick={nextStep}>&gt;</button>
             </div>
+          <div className='script'>{output}</div>
           <div className='buttons'>
             <button className='transcript-button'>Start Transcript</button>
             <button className='learn-button'>Learn More</button>
@@ -159,7 +160,6 @@ function App() {
         </div>
 
         <canvas id="handCanvas" style={{ transfrom: "translateY(-150%)" }}></canvas>
-        <div style={{ fontSize: "20px" }}>{output}</div>
         
         {/* <Cube /> */}
       </div>
