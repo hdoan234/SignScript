@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import Practice from './Practice';
-import Game from './Game';
+import App from './App.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Practice/>
+  <App />
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Practice.css';
-import monkeyImage from './monkey.png'; // Ensure you have an image named monkey.png in the same directory
 
 import { detectHands, aslPredict, drawHand } from './handpose';
 
 export default function Practice() {
     const [sentence, setSentence] = useState([]);
     const [wpm, setWpm] = useState(0);
-    const [time, setTime] = useState(60);
+    const [time, setTime] = useState(120);
     const [gameActive, setGameActive] = useState(false);
     const [currentWord, setCurrentWord] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(-1);
@@ -121,7 +120,6 @@ export default function Practice() {
                 }, 30);
             })
 
-            const intervalId = setInterval(updateWPM, 1000);
             const countdownId = setInterval(() => {
                 setTime(prevTime => {
                     if (prevTime <= 1) {
@@ -133,7 +131,6 @@ export default function Practice() {
                 });
             }, 1000);
             return () => {
-                clearInterval(intervalId);
                 clearInterval(countdownId);
                 clearInterval(handTrackingId);
             };
@@ -142,7 +139,6 @@ export default function Practice() {
     }, [gameActive]);
 
     useEffect(() => {
-        console.log("Rerendered", currentWord, currentIndex);
         predictedChar && checkInput(predictedChar, currentWord, currentIndex);
     }, [predictedChar]);
 
@@ -164,7 +160,6 @@ export default function Practice() {
         const value = inputValue.toLowerCase();
         
         const currentWordChar = sentence[word][index+1].toLowerCase();
-        console.log(value)
         if (value === currentWordChar) {
             if (currentIndex + 1 === sentence[currentWord].length - 1) {
                 setCurrentWord(prevWord => {
@@ -181,13 +176,6 @@ export default function Practice() {
             }
         }
         
-        
-    };
-
-    const updateWPM = () => {
-        const timeDiff = (60 - time) / 60; // in minutes
-        const wpm = Math.floor(words / timeDiff);
-        setWpm(wpm);
     };
 
     const endGame = () => {
@@ -226,7 +214,6 @@ export default function Practice() {
                         </p>
                     </div>
                     <div className='stats'>
-                        <p id='wpm'>WPM: {!!wpm ? wpm : 0}</p>
                         <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
                     </div>
                     <button id="startButton" onClick={startGame} disabled={gameActive}>Start Game</button>
