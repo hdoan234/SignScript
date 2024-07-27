@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Practice.css';
-import { HourglassOutline, SpeedometerOutline, PlayOutline } from 'react-ionicons';
+import { HourglassOutline, SpeedometerOutline, PlayOutline, RefreshOutline } from 'react-ionicons';
 import { detectHands, aslPredict, drawHand } from './handpose';
 
 export default function Practice() {
@@ -11,7 +11,7 @@ export default function Practice() {
     const [gameActive, setGameActive] = useState(false);
     const [currentWord, setCurrentWord] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(-1);
-    const [predictedChar, setPredictedChar] = useState(''); 
+    const [predictedChar, setPredictedChar] = useState('');
 
     const handCanvas = useRef(null);
 
@@ -69,57 +69,55 @@ export default function Practice() {
     ];
 
     useEffect(() => {
-
         if (gameActive) {
-
             const video = document.createElement('video');
             video.muted = true;
             video.autoplay = true;
             video.playsInline = true;
-        
+
             video.width = 640;
             video.height = 480;
-        
+
             video.style.display = 'none';
 
             const ctx = handCanvas.current.getContext('2d');
-            
+
             navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-        
-                video.play();
-                console.log('Video stream loaded');
-            })
-            .catch(err => {
-                console.error(err);
-            });
+                .then(stream => {
+                    video.srcObject = stream;
+
+                    video.play();
+                    console.log('Video stream loaded');
+                })
+                .catch(err => {
+                    console.error(err);
+                });
 
             let handTrackingId;
 
             new Promise((resolve) => video.onloadedmetadata = resolve)
-            .then(() => {
-                console.log('Video metadata loaded');
-            
-                handTrackingId = setInterval(async () => {
-                    const hands = await detectHands(video);
-                    if (hands.length <= 0) {
-                        return;
-                    }
-                    handCanvas.current.width = video.videoWidth;
-                    handCanvas.current.height = video.videoHeight;
-                    drawHand(hands.map(hand =>  {
-                        return {
-                            "coords": hand.keypoints.map(point => [point.x,point.y]),
-                            "isLeft": hand.handedness === "Left",
-                        }
-                    })
-                    ,ctx);
+                .then(() => {
+                    console.log('Video metadata loaded');
 
-                    setPredictedChar(aslPredict(hands[0].keypoints3D.map(point => [point.x,point.y,point.z]), hands[0].handedness === "Left"));
-                    
-                }, 30);
-            })
+                    handTrackingId = setInterval(async () => {
+                        const hands = await detectHands(video);
+                        if (hands.length <= 0) {
+                            return;
+                        }
+                        handCanvas.current.width = video.videoWidth;
+                        handCanvas.current.height = video.videoHeight;
+                        drawHand(hands.map(hand => {
+                            return {
+                                "coords": hand.keypoints.map(point => [point.x, point.y]),
+                                "isLeft": hand.handedness === "Left",
+                            }
+                        })
+                            , ctx);
+
+                        setPredictedChar(aslPredict(hands[0].keypoints3D.map(point => [point.x, point.y, point.z]), hands[0].handedness === "Left"));
+
+                    }, 30);
+                })
 
             const countdownId = setInterval(() => {
                 setTime(prevTime => {
@@ -154,12 +152,25 @@ export default function Practice() {
         setGameActive(true);
         createSentence();
         setWpm(0);
+        setCurrentWord(0);  // Reset current word
+        setCurrentIndex(-1);  // Reset current index
+    };
+
+    const resetGame = () => {
+        setGameActive(false);
+        setSentence([]);
+        setWpm(0);
+        setTime(120);
+        setWordCount(10);
+        setCurrentWord(0);
+        setCurrentIndex(-1);
+        setPredictedChar('');
     };
 
     const checkInput = (inputValue, word, index) => {
         const value = inputValue.toLowerCase();
-        
-        const currentWordChar = sentence[word][index+1].toLowerCase();
+
+        const currentWordChar = sentence[word][index + 1].toLowerCase();
         if (value === currentWordChar) {
             if (currentIndex + 1 === sentence[currentWord].length - 1) {
                 setCurrentWord(prevWord => {
@@ -169,13 +180,12 @@ export default function Practice() {
                     }
                     return prevWord + 1
                 });
-                
+
                 setCurrentIndex(-1);
             } else {
                 setCurrentIndex(prevIndex => prevIndex + 1);
             }
         }
-        
     };
 
     const endGame = () => {
@@ -197,25 +207,25 @@ export default function Practice() {
                         </div>
                         <div className='setting'>
                             <SpeedometerOutline color={'#00000'} title={"Speed"} height="25px" width="25px" />
-                            <input type="range" className="word-slider slider" min="5" max="30" step="1" value={wordCount} onChange={(e) => setWordCount(e.target.value)} disabled={gameActive}/>
+                            <input type="range" className="word-slider slider" min="5" max="30" step="1" value={wordCount} onChange={(e) => setWordCount(e.target.value)} disabled={gameActive} />
                         </div>
                     </div>
                 </div>
-                
+
                 <div className='text-container'>
                     <p className='paragraph'>
-                        Welcome to the game! 
+                        Welcome to the game!
                     </p>
                     <div className='output-container'>
                         <p className='output'>Your Sentence:</p>
                         <p className='output-text'>
-                            {   
+                            {
                                 sentence.map((word, wIndex) => {
                                     return (
-                                        <span>
+                                        <span key={wIndex}>
                                             {
                                                 word.split("").map((c, cIndex) => {
-                                                    return <span className={(wIndex < currentWord || (wIndex == currentWord && cIndex <= currentIndex)) && "correct"}>{c}</span>
+                                                    return <span key={cIndex} className={(wIndex < currentWord || (wIndex === currentWord && cIndex <= currentIndex)) ? "correct" : ""}>{c}</span>
                                                 })
                                             }
                                             &nbsp;
@@ -231,7 +241,10 @@ export default function Practice() {
                             <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
                             <p id='word-count'>Word Count: {wordCount}</p>
                         </div>
-                        <button id="startButton" onClick={startGame} disabled={gameActive}><PlayOutline color={"#fff"} /> <span>Start</span></button>
+                        <div style={{ display: 'flex', gap: '1vw' }}>
+                            <button id="resetButton" onClick={resetGame} disabled={!gameActive}><RefreshOutline color={"#fff"} /> <span>Reset</span></button>
+                            <button id="startButton" onClick={startGame} disabled={gameActive}><PlayOutline color={"#fff"} /> <span>Start</span></button>
+                        </div>
                     </div>
 
                 </div>

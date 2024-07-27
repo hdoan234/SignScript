@@ -179,6 +179,35 @@ body {
     transition: ease-in-out 0.3s;
 }
 
+#resetButton {
+    all: unset;
+    padding: 15px 25px;
+    font-size: 1.25em;
+    cursor: pointer;
+    background-color: #f7a1a1;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 3vh;
+    z-index: 10;
+    width: 7vw;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#resetButton:disabled {
+    background-color: #fcc;
+    color: #b3c7f7;
+    cursor: not-allowed;
+}
+
+#resetButton:hover {
+    background-color: #d93f3f;
+    transition: ease-in-out 0.3s;
+}
+
 #wpm {
     font-size: 1em;
     font-weight: 700;
