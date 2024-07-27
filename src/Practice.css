@@ -1,11 +1,11 @@
 body {
-    background-color: #f0f8ff;
+    background-color: #b3c7f7;
 }
 
 .practice-header {
     color: rgb(0, 0, 0);
     font-size: 2em;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Tahoma, Geneva, Verdana, sans-serif;
     margin-top: 4vh;
     display: flex;
     justify-content: center;
@@ -22,7 +22,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    background-color: rgba(240, 248, 255, 0.405);
+    background-color: #8babf1;
     width: 90vw;
     height: 80vh;
     border-radius: 20px;
@@ -42,23 +42,36 @@ body {
     width: 50%;
     height: 70vh;
     border: 1px solid white;
-    padding: 1vh 3vw;
+    padding: 1vh 2vw;
     top: 0;
     margin: 2vw;
+    border-radius: 15px;
 }
 
 .paragraph {
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-size: 1.3em;
-    font-family: 'Times New Roman', Times, serif;
-    margin-top: 4vh;
+    font-family: Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    top: 0;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    height: 5vh;
 }
 
 .output {
     font-weight: 700;
     color: rgb(0, 0, 0);
+}
+
+.output-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+    width: 38vw;
+    height: 30vh;
+    overflow-y: auto; 
+    padding-right: 1vw; 
 }
 
 .output-text {
@@ -67,9 +80,7 @@ body {
     font-family: 'Times New Roman', Times, serif;
     margin-top: 4vh;
     display: flex;
-    justify-content: center;
-    width: 40vw;
-    height: 25vh;
+    flex-wrap: wrap; 
 }
 
 .text {
@@ -92,3 +103,40 @@ body {
     height: 40vh;
     border: solid 1px white;
 }
+
+#startButton {
+    all: unset;
+    padding: 15px 25px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #90d8b2;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 3vh;
+    position: relative;
+    z-index: 10;
+    width: 7vw;
+    text-align: center;
+    left:50%;
+    transform: translateX(-50%);}
+
+#startButton:hover {
+    background-color: #00bf7d;
+    transition: ease-in-out 0.3s;
+}
+#wpm{
+    font-size: 1em;
+    font-weight: 700;
+}
+#timer{
+    font-size: 1em;
+    font-weight: 700;
+}
+.varela-round-regular {
+    font-family: "Varela Round", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  

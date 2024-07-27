@@ -216,7 +216,7 @@ export default function Practice() {
                     <div className='stats'>
                         <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
                     </div>
-                    <button id="startButton" onClick={startGame} disabled={gameActive}>Start Game</button>
+                    <button id="startButton" onClick={startGame} disabled={gameActive}>Start Game!</button>
                 </div>
             </div>
         </div>
