@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Practice.css';
-import monkeyImage from './monkey.png'; // Ensure you have an image named monkey.png in the same directory
-
+import monkeyImage from './monkey.png';
+import { HourglassOutline, SpeedometerOutline } from 'react-ionicons';
 import { detectHands, aslPredict, drawHand } from './handpose';
 
 export default function Practice() {
@@ -199,7 +199,15 @@ export default function Practice() {
         <div className="body">
             <p className='practice-header'>Practice your ASL skill here!</p>
             <div className='container'>
-                <canvas className='handCanvas' ref={handCanvas} width="640" height="480"></canvas>
+                <div className='title-canvas'>
+                    <p className='signscript'>SignScript</p>
+                    <canvas className='handCanvas' ref={handCanvas} width="540" height="380"></canvas>
+                    <div className='setting-bar'>
+                        <HourglassOutline color={'#00000'} title={"Timer"} height="25px" width="25px" />
+                        <SpeedometerOutline color={'#00000'} title={"Speed"} height="25px" width="25px" />
+                    </div>
+                </div>
+                
                 <div className='text-container'>
                     <p className='paragraph'>
                         Welcome to the game! 
@@ -207,7 +215,6 @@ export default function Practice() {
                     <div className='output-container'>
                         <p className='output'>Your Sentence:</p>
                         <p className='output-text'>
-
                             {   
                                 sentence.map((word, wIndex) => {
                                     return (
@@ -222,7 +229,6 @@ export default function Practice() {
                                     )
                                 })
                             }
-
                         </p>
                     </div>
                     <div className='stats'>

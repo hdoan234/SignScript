@@ -1,11 +1,12 @@
 body {
     background-color: #b3c7f7;
+    font-family: 'Varela Round', sans-serif; /* Apply the Google Font to the body */
 }
 
 .practice-header {
     color: rgb(0, 0, 0);
     font-size: 2em;
-    font-family: Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Varela Round', sans-serif; /* Apply the Google Font to the header */
     margin-top: 4vh;
     display: flex;
     justify-content: center;
@@ -30,6 +31,22 @@ body {
     margin-bottom: 5vh;
 }
 
+.varela-round-regular {
+    font-family: 'Varela Round', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.signscript {
+    color: rgb(255, 255, 255);
+    font-size: 3.5em;
+    font-family: 'Varela Round', sans-serif;
+    display: flex;
+    justify-content: center;
+    font-weight: 700;
+    margin-top: -2vh;
+}
+
 .monkey {
     width: 20vw;
     height: auto;
@@ -48,10 +65,32 @@ body {
     border-radius: 15px;
 }
 
+.handCanvas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2vw;
+    width: 35vw;
+    height: 40vh;
+    border: solid 1px white;
+}
+.setting-bar{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 20vw;
+    height: 5vh;
+    background-color: #799dea;
+    color: white;
+    border-radius: 20px;
+    margin-top: 3vh;
+    margin-left:9vw;
+}
+
 .paragraph {
     color: rgb(255, 255, 255);
     font-size: 1.3em;
-    font-family: Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Tahoma', Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,24 +158,21 @@ body {
     z-index: 10;
     width: 7vw;
     text-align: center;
-    left:50%;
-    transform: translateX(-50%);}
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 #startButton:hover {
     background-color: #00bf7d;
     transition: ease-in-out 0.3s;
 }
-#wpm{
+
+#wpm {
     font-size: 1em;
     font-weight: 700;
 }
-#timer{
+
+#timer {
     font-size: 1em;
     font-weight: 700;
 }
-.varela-round-regular {
-    font-family: "Varela Round", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-  
