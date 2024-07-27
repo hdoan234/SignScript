@@ -11,7 +11,7 @@ const model = handdetection.SupportedModels.MediaPipeHands;
 const detectorConfig = {
     runtime: 'mediapipe',
     solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
-    maxHands: 2,
+    maxHands: 1,
     modelType: 'full',
 }
 await tf.ready();

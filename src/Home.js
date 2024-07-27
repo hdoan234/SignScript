@@ -52,63 +52,6 @@ function App() {
   ]
 
 
-  useEffect(() => {
-    const video = document.createElement('video');
-    video.muted = true;
-    video.autoplay = true;
-    video.playsInline = true;
-
-    video.width = 640;
-    video.height = 480;
-
-    video.style.display = 'none';
-
-    document.getElementById('root').appendChild(video);
-
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-    .then(stream => {
-      video.srcObject = stream;
-
-      video.play();
-      console.log('Video stream loaded');
-    })
-    .catch(err => {
-      console.error(err);
-    });
-
-    let interId;
-    
-    const canvas = document.getElementById('handCanvas');
-    const ctx = canvas.getContext('2d');
-    new Promise((resolve) => video.onloadedmetadata = resolve)
-    .then(() => {
-      console.log('Video metadata loaded');
-  
-      interId = setInterval(async () => {
-        const hands = await detectHands(video);
-        if (hands.length <= 0) {
-          return;
-        }
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        setOutput(o => aslPredict(hands[0].keypoints3D.map(point => [point.x,point.y,point.z]), hands[0].handedness === "Left"));
-        drawHand(hands.map(hand =>  {
-          return {
-            "coords": hand.keypoints.map(point => [point.x,point.y]),
-            "isLeft": hand.handedness === "Left",
-          }
-        })
-        ,ctx);
-      }, 30);
-    });
-
-
-    return () => {
-      clearInterval(interId);
-    }
-    
-  }, [])
-
   return (
     <div className="App">
         <div className='background'>
@@ -124,15 +67,13 @@ function App() {
               <button className="prev" onClick={prevStep}>&lt; </button>
               <button className="next" onClick={nextStep}>&gt;</button>
             </div>
-          <div className='script'>{output}</div>
-          <div className='buttons'>
-            <button className='transcript-button'>Start Transcript</button>
-            <button className='learn-button'>Learn More</button>
-          </div>
+            <div className='script'>{output}</div>
+            <div className='buttons'>
+              <button className='transcript-button' onClick={() => document.location = "/practice"}>Start Signing</button>
+            </div>
           
         </div>
 
-        <canvas id="handCanvas" style={{ transfrom: "translateY(-150%)" }}></canvas>
         
         {/* <Cube /> */}
       </div>

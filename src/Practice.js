@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Practice.css';
-import monkeyImage from './monkey.png';
-import { HourglassOutline, SpeedometerOutline } from 'react-ionicons';
+import { HourglassOutline, SpeedometerOutline, PlayOutline } from 'react-ionicons';
 import { detectHands, aslPredict, drawHand } from './handpose';
 
 export default function Practice() {
     const [sentence, setSentence] = useState([]);
     const [wpm, setWpm] = useState(0);
     const [time, setTime] = useState(120);
+    const [wordCount, setWordCount] = useState(10);
     const [gameActive, setGameActive] = useState(false);
     const [currentWord, setCurrentWord] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(-1);
@@ -145,7 +145,7 @@ export default function Practice() {
 
     const createSentence = () => {
         setSentence([]);
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < wordCount; i++) {
             setSentence(prevSentence => [...prevSentence, words[Math.floor(Math.random() * words.length)]]);
         }
     }
@@ -154,7 +154,6 @@ export default function Practice() {
         setGameActive(true);
         createSentence();
         setWpm(0);
-        setTime(120);
     };
 
     const checkInput = (inputValue, word, index) => {
@@ -186,14 +185,20 @@ export default function Practice() {
 
     return (
         <div className="body">
-            <p className='practice-header'>Practice your ASL skill here!</p>
+            <p className='practice-header'>Practice your ASL!</p>
             <div className='container'>
                 <div className='title-canvas'>
                     <p className='signscript'>SignScript</p>
                     <canvas className='handCanvas' ref={handCanvas} width="540" height="380"></canvas>
                     <div className='setting-bar'>
-                        <HourglassOutline color={'#00000'} title={"Timer"} height="25px" width="25px" />
-                        <SpeedometerOutline color={'#00000'} title={"Speed"} height="25px" width="25px" />
+                        <div className='setting'>
+                            <HourglassOutline color={'#00000'} title={"Timer"} height="25px" width="25px" />
+                            <input type="range" className="time-slider slider" min="30" max="300" step="30" value={time} onChange={(e) => setTime(e.target.value)} disabled={gameActive} />
+                        </div>
+                        <div className='setting'>
+                            <SpeedometerOutline color={'#00000'} title={"Speed"} height="25px" width="25px" />
+                            <input type="range" className="word-slider slider" min="5" max="30" step="1" value={wordCount} onChange={(e) => setWordCount(e.target.value)} disabled={gameActive}/>
+                        </div>
                     </div>
                 </div>
                 
@@ -220,10 +225,15 @@ export default function Practice() {
                             }
                         </p>
                     </div>
-                    <div className='stats'>
-                        <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+                        <div className='stats'>
+                            <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
+                            <p id='word-count'>Word Count: {wordCount}</p>
+                        </div>
+                        <button id="startButton" onClick={startGame} disabled={gameActive}><PlayOutline color={"#fff"} /> <span>Start</span></button>
                     </div>
-                    <button id="startButton" onClick={startGame} disabled={gameActive}>Start Game!</button>
+
                 </div>
             </div>
         </div>
