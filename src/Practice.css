@@ -13,6 +13,10 @@ body {
     position: relative;
 }
 
+.correct {
+    color: lime;
+}
+
 .container {
     display: flex;
     align-items: center;

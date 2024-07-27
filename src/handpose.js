@@ -36,3 +36,31 @@ export async function detectHands(video) {
     return hands;
 }
 
+export const drawHand = (keypointsList, ctx) => {
+    const connections = [
+      [0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6],
+      [6, 7], [7, 8], [0, 9], [9, 10], [10, 11], [11, 12],
+      [0, 13], [13, 14], [14, 15], [15, 16], [0, 17], [17, 18],
+      [18, 19], [19, 20]
+    ];
+    // Clear the canvas
+    keypointsList.forEach((keypoints) => {
+      keypoints["coords"] = keypoints["coords"].map(point => [ point[0], point[1], point[2]]);
+      ctx.strokeStyle = keypoints["isLeft"] ? 'lime' : 'cyan';
+      connections.forEach(([start, end]) => {
+        ctx.beginPath();
+        ctx.moveTo(keypoints["coords"][start][0], keypoints["coords"][start][1]);
+        ctx.lineTo(keypoints["coords"][end][0], keypoints["coords"][end][1]);
+        ctx.lineWidth = 5;
+        ctx.stroke();
+      });
+      
+      // Draw keypoints
+      ctx.fillStyle = keypoints["isLeft"] ? 'red' : 'blue';
+      keypoints["coords"].forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point[0], point[1], 5, 0, 10 * Math.PI);
+        ctx.fill();
+      });
+    })
+}
