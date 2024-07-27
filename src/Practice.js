@@ -6,15 +6,19 @@ import { detectHands, aslPredict, drawHand } from './handpose';
 export default function Practice() {
     const [sentence, setSentence] = useState([]);
     const [wpm, setWpm] = useState(0);
+    const [initialTime, setInitialTime] = useState(120);
     const [time, setTime] = useState(120);
-    const [wordCount, setWordCount] = useState(10);
+    const [wordCount, setWordCount] = useState(15);
     const [gameActive, setGameActive] = useState(false);
     const [currentWord, setCurrentWord] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(-1);
     const [predictedChar, setPredictedChar] = useState('');
+    const [result, setResult] = useState('');
 
     const handCanvas = useRef(null);
 
+    
+    // Words to choose from
     const words = [
         "interfere",
         "reign",
@@ -68,7 +72,13 @@ export default function Practice() {
         "past",
     ];
 
+    // Format time to MM:SS
+    const timeFormatter = (t) => {
+        return `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`
+    }
+
     useEffect(() => {
+        // Load video stream and start hand tracking on game start
         if (gameActive) {
             const video = document.createElement('video');
             video.muted = true;
@@ -78,10 +88,9 @@ export default function Practice() {
             video.width = 640;
             video.height = 480;
 
-            video.style.display = 'none';
-
             const ctx = handCanvas.current.getContext('2d');
 
+            // Load video stream
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     video.srcObject = stream;
@@ -93,32 +102,42 @@ export default function Practice() {
                     console.error(err);
                 });
 
+            // Start hand tracking and prediction
             let handTrackingId;
-
             new Promise((resolve) => video.onloadedmetadata = resolve)
-                .then(() => {
-                    console.log('Video metadata loaded');
+            .then(() => {
+                console.log('Video metadata loaded');
 
-                    handTrackingId = setInterval(async () => {
-                        const hands = await detectHands(video);
-                        if (hands.length <= 0) {
-                            return;
+                handTrackingId = setInterval(async () => {
+                    
+                    // Detect hands from the video stream
+                    const hands = await detectHands(video);
+
+                    if (hands.length <= 0) {
+                        return; // No hands detected
+                    }
+                    
+                    handCanvas.current.width = video.videoWidth;
+                    handCanvas.current.height = video.videoHeight;
+
+                    // Draw the hand landmarks on the canvas
+                    drawHand(hands.map(hand => {
+
+                        return {
+                            "coords": hand.keypoints.map(point => [point.x, point.y]),
+                            "isLeft": hand.handedness === "Left",
                         }
-                        handCanvas.current.width = video.videoWidth;
-                        handCanvas.current.height = video.videoHeight;
-                        drawHand(hands.map(hand => {
-                            return {
-                                "coords": hand.keypoints.map(point => [point.x, point.y]),
-                                "isLeft": hand.handedness === "Left",
-                            }
-                        })
-                            , ctx);
 
-                        setPredictedChar(aslPredict(hands[0].keypoints3D.map(point => [point.x, point.y, point.z]), hands[0].handedness === "Left"));
+                    })
+                    , ctx);
+                    
+                    // Predict the ASL character
+                    setPredictedChar(aslPredict(hands[0].keypoints3D.map(point => [point.x, point.y, point.z]), hands[0].handedness === "Left"));
 
-                    }, 30);
-                })
-
+                }, 1000 / 60) // 60 FPS (might fluctuate based on device performance);
+            })
+            
+            // Countdown timer
             const countdownId = setInterval(() => {
                 setTime(prevTime => {
                     if (prevTime <= 1) {
@@ -129,6 +148,8 @@ export default function Practice() {
                     return prevTime - 1;
                 });
             }, 1000);
+
+            // Cleanup
             return () => {
                 clearInterval(countdownId);
                 clearInterval(handTrackingId);
@@ -137,10 +158,12 @@ export default function Practice() {
         }
     }, [gameActive]);
 
+    // Ensure the state is updated before checking the input
     useEffect(() => {
         predictedChar && checkInput(predictedChar, currentWord, currentIndex);
     }, [predictedChar]);
 
+    // Create a new sentence
     const createSentence = () => {
         setSentence([]);
         for (let i = 0; i < wordCount; i++) {
@@ -148,31 +171,45 @@ export default function Practice() {
         }
     }
 
+    // Initialize the game
     const startGame = () => {
         setGameActive(true);
         createSentence();
         setWpm(0);
+        setTime(initialTime);
+        setResult('');
         setCurrentWord(0);  // Reset current word
         setCurrentIndex(-1);  // Reset current index
     };
 
+    // Reset the game
     const resetGame = () => {
         setGameActive(false);
         setSentence([]);
-        setWpm(0);
-        setTime(120);
-        setWordCount(10);
+        setResult('');
         setCurrentWord(0);
         setCurrentIndex(-1);
         setPredictedChar('');
     };
 
+    /**
+     * Check the input character against the current character in the word
+     * 
+     * @param {String} inputValue The character input from the user
+     * @param {Number} word The current word index
+     * @param {Number} index The current character index in the word
+     */
     const checkInput = (inputValue, word, index) => {
-        const value = inputValue.toLowerCase();
 
+        // Format the character to lowercase for comparison
+        const value = inputValue.toLowerCase();
         const currentWordChar = sentence[word][index + 1].toLowerCase();
+
+
         if (value === currentWordChar) {
+            // Correct character
             if (currentIndex + 1 === sentence[currentWord].length - 1) {
+                // Move on to next word
                 setCurrentWord(prevWord => {
                     if (prevWord === sentence.length - 1) {
                         endGame();
@@ -183,14 +220,22 @@ export default function Practice() {
 
                 setCurrentIndex(-1);
             } else {
+                // Move on to next character
                 setCurrentIndex(prevIndex => prevIndex + 1);
             }
         }
     };
 
+    // End the game and prompt the user
     const endGame = () => {
         setGameActive(false);
-        alert("Time out!! you loser");
+
+        if (currentWord === sentence.length - 1) {
+            setCurrentWord(sentence.length);
+            setResult("Congratulations! You've completed the sentence!");
+        } else {
+            setResult("Time's up! You didn't complete the sentence.");
+        }
     };
 
     return (
@@ -203,7 +248,7 @@ export default function Practice() {
                     <div className='setting-bar'>
                         <div className='setting'>
                             <HourglassOutline color={'#00000'} title={"Timer"} height="25px" width="25px" />
-                            <input type="range" className="time-slider slider" min="30" max="300" step="30" value={time} onChange={(e) => setTime(e.target.value)} disabled={gameActive} />
+                            <input type="range" className="time-slider slider" min="30" max="300" step="30" value={initialTime} onChange={(e) => setInitialTime(e.target.value)} disabled={gameActive} />
                         </div>
                         <div className='setting'>
                             <SpeedometerOutline color={'#00000'} title={"Speed"} height="25px" width="25px" />
@@ -218,6 +263,7 @@ export default function Practice() {
                     </p>
                     <div className='output-container'>
                         <p className='output'>Your Sentence:</p>
+                        <p className='result'>{result}</p>
                         <p className='output-text'>
                             {
                                 sentence.map((word, wIndex) => {
@@ -238,7 +284,7 @@ export default function Practice() {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
                         <div className='stats'>
-                            <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
+                            <p id='timer'>Time: {gameActive ? timeFormatter(time) : timeFormatter(initialTime)}</p>
                             <p id='word-count'>Word Count: {wordCount}</p>
                         </div>
                         <div style={{ display: 'flex', gap: '1vw' }}>

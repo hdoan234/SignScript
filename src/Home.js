@@ -21,8 +21,7 @@ const variants = {
   }
 }
 function App() {
-  const [output, setOutput] = useState('');
-
+  // Image slideshow functions
   function prevStep(){
     if(index === 0){
       setIndex(image.length-1)
@@ -31,8 +30,6 @@ function App() {
     setIndex(index-1)
   }
 
-
-
   function nextStep(){
     if(index===image.length-1){
       setIndex(0)
@@ -40,9 +37,13 @@ function App() {
     }
     setIndex(index+1)
   }
+
+  // Current index
   const[index, setIndex] = React.useState(0);
 
   const title = "SignScript";
+
+  // Images for slideshow
   const image=[
     "https://i.pinimg.com/564x/c2/86/44/c28644061060cb6f04e17f6e9e7870fe.jpg",
     "https://i.pinimg.com/564x/5e/31/d5/5e31d59d9c92b8ee4d67d095d9beed3c.jpg",
@@ -67,15 +68,11 @@ function App() {
               <button className="prev" onClick={prevStep}>&lt; </button>
               <button className="next" onClick={nextStep}>&gt;</button>
             </div>
-            <div className='script'>{output}</div>
             <div className='buttons'>
               <button className='transcript-button' onClick={() => document.location = "/practice"}>Start Signing</button>
             </div>
           
         </div>
-
-        
-        {/* <Cube /> */}
       </div>
       </div>
       

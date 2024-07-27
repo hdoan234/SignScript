@@ -155,7 +155,7 @@ body {
     padding: 15px 25px;
     font-size: 1.25em;
     cursor: pointer;
-    background-color: #90d8b2;
+    background-color: #009e4a;
     border-radius: 20px;
     color: white;
     border: none;
@@ -184,7 +184,7 @@ body {
     padding: 15px 25px;
     font-size: 1.25em;
     cursor: pointer;
-    background-color: #f7a1a1;
+    background-color: #bc0000;
     border-radius: 20px;
     color: white;
     border: none;
@@ -204,7 +204,7 @@ body {
 }
 
 #resetButton:hover {
-    background-color: #d93f3f;
+    background-color: #ff6d6d;
     transition: ease-in-out 0.3s;
 }
 
