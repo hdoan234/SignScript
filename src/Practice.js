@@ -229,7 +229,7 @@ export default function Practice() {
                         <p id='wpm'>WPM: {!!wpm ? wpm : 0}</p>
                         <p id='timer'>Time: {String(Math.floor(time / 60)).padStart(2, '0')}:{String(time % 60).padStart(2, '0')}</p>
                     </div>
-                    <button id="startButton" onClick={startGame} disabled={gameActive}>Start Game</button>
+                    <button id="startButton" onClick={startGame} disabled={gameActive}>Start Game!</button>
                 </div>
             </div>
         </div>
